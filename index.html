@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>Sad Caption</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,"Noto Sans Bengali",sans-serif;background:linear-gradient(135deg,#09090b,#21121a);color:#fff;min-height:100vh}
+.app{max-width:560px;margin:auto;padding:20px 16px}header{display:flex;align-items:center;gap:12px;padding:16px 4px 22px}.logo{font-size:38px}
+h1{margin:0;font-size:28px}header p{margin:4px 0;color:#aaa}.card{background:#ffffff12;border:1px solid #ffffff1c;border-radius:22px;padding:20px;margin-bottom:16px}
+label,h2{display:block;margin:0 0 10px;font-weight:700}h2{font-size:18px}select,textarea{width:100%;border:1px solid #444;background:#111;color:#fff;border-radius:13px;padding:13px;font-size:16px;outline:none}
+textarea{resize:vertical}.caption{margin:18px 0;padding:22px 16px;border-radius:16px;background:#09090c;line-height:1.8;font-size:21px;text-align:center;min-height:150px;display:flex;align-items:center;justify-content:center}
+.actions{display:flex;gap:10px}button{flex:1;border:0;border-radius:13px;padding:13px 15px;font-size:16px;font-weight:700;background:#e11d48;color:#fff}button.secondary{background:#333}
+#status{text-align:center;color:#9ae6b4;margin-top:10px;font-size:14px}footer{text-align:center;color:#777;padding:10px}
+</style>
+</head>
+<body><div class="app">
+<header><div class="logo">🥀</div><div><h1>Sad Caption</h1><p>তোমার অনুভূতির জন্য একটি ক্যাপশন</p></div></header>
+<main><section class="card"><label>ক্যাটাগরি</label>
+<select id="category"><option value="all">সব ক্যাপশন</option><option value="love">ভালোবাসা</option><option value="lonely">একাকিত্ব</option><option value="attitude">অ্যাটিটিউড</option><option value="night">রাত জাগা</option></select>
+<div id="caption" class="caption"></div><div class="actions"><button id="newBtn">নতুন ক্যাপশন</button><button id="copyBtn" class="secondary">কপি</button></div><div id="status"></div></section>
+<section class="card"><h2>নিজের ক্যাপশন যোগ করুন</h2><textarea id="custom" rows="4" placeholder="আপনার ক্যাপশন লিখুন..."></textarea><br><br><button id="addBtn">ক্যাপশন সংরক্ষণ করুন</button></section></main>
+<footer>Sad Caption App • বাংলা কনটেন্টের জন্য</footer></div>
+<script>
+const data={love:["ভালোবাসা ছিল সত্যি, মানুষটাই ছিল ভুল। 💔","তুমি বদলে গেছো, অথচ আমার অপেক্ষাটা এখনো বদলায়নি। 🥀","কিছু সম্পর্ক শেষ হয় না, শুধু কথা বলা বন্ধ হয়ে যায়। 🖤"],lonely:["ভিড়ের মাঝেও কখনো কখনো নিজেকে সবচেয়ে একা লাগে। 🥀","আমি হারিয়ে যাইনি, শুধু নিজের ভেতরেই কোথাও আটকে আছি। 🖤","সবাই পাশে থাকে, কিন্তু সবাই আপন হয় না।"],attitude:["আমার নীরবতাকে দুর্বলতা ভেবো না—আমি শুধু অপ্রয়োজনীয় কথায় সময় দিই না। 🖤","যেখানে সম্মান নেই, সেখানে আমার উপস্থিতিও নেই।","আমি বদলাইনি, শুধু মানুষ চিনতে শিখেছি।"],night:["রাত যত গভীর হয়, কিছু স্মৃতি তত বেশি জেগে ওঠে। 🌙","সবাই ঘুমিয়ে যায়, শুধু কিছু চিন্তা রাত জাগে। 🖤","নীরব রাত আর পুরোনো স্মৃতি—দুটোই ঘুমাতে দেয় না। 🌙🥀"]};
+const $=id=>document.getElementById(id);
+function saved(){return JSON.parse(localStorage.getItem("saved")||"[]")}
+function pool(){return ($("category").value==="all"?Object.values(data).flat():data[$("category").value]).concat(saved())}
+function next(){let p=pool();$("caption").textContent="“"+p[Math.floor(Math.random()*p.length)]+"”";$("status").textContent=""}
+$("newBtn").onclick=next;$("category").onchange=next;
+$("copyBtn").onclick=async()=>{await navigator.clipboard.writeText($("caption").textContent.replace(/^“|”$/g,""));$("status").textContent="ক্যাপশন কপি হয়েছে ✓"}
+$("addBtn").onclick=()=>{let t=$("custom").value.trim();if(!t){$("status").textContent="আগে একটি ক্যাপশন লিখুন।";return}let s=saved();s.push(t);localStorage.setItem("saved",JSON.stringify(s));$("custom").value="";$("status").textContent="সংরক্ষণ হয়েছে ✓";next()}
+next();
+</script></body></html>
